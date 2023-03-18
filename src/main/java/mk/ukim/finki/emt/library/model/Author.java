@@ -18,4 +18,11 @@ public class Author {
 
     @ManyToOne
     Country country;
+
+    public Author() {
+
+    }
+
+    public Author(String name, String surname, Country country) {
+    }
 }

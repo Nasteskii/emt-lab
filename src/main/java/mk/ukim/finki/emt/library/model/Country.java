@@ -16,4 +16,10 @@ public class Country {
 
     String continent;
 
+    public Country() {
+
+    }
+
+    public Country(String name, String continent) {
+    }
 }

@@ -19,7 +19,14 @@ public class Book {
     Category category;
 
     @ManyToMany
-    List<Author> author;
+    List<Author> authors;
 
     Integer availableCopies;
+
+    public Book() {
+
+    }
+
+    public Book(String name, Category category, List<Author> authors, Integer availableCopies) {
+    }
 }
