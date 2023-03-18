@@ -1,8 +1,6 @@
 package mk.ukim.finki.emt.library.service;
 
-import mk.ukim.finki.emt.library.model.Author;
 import mk.ukim.finki.emt.library.model.Book;
-import mk.ukim.finki.emt.library.model.Country;
 import mk.ukim.finki.emt.library.model.enumerations.Category;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +15,11 @@ public interface BookService {
 
     Optional<Book> findAllByName(String name);
 
-    Book save(String name, Category category, List<Author> authors, Integer availableCopies);
+    Book save(String name, Category category, List<Long> authors, Integer availableCopies);
 
     Book save(Book book);
 
-    Book edit(Long id, String name, Category category, List<Author> authors, Integer availableCopies);
+    Book edit(Long id, String name, Category category, List<Long> authors, Integer availableCopies);
 
 
     void deleteById(Long id);
