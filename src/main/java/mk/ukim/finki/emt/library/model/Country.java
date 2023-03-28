@@ -21,5 +21,7 @@ public class Country {
     }
 
     public Country(String name, String continent) {
+        this.name = name;
+        this.continent = continent;
     }
 }

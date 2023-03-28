@@ -28,5 +28,10 @@ public class Book {
     }
 
     public Book(String name, Category category, List<Author> authors, Integer availableCopies) {
+        this.name = name;
+        this.category = category;
+        this.authors = authors;
+        this.availableCopies = availableCopies;
     }
+
 }

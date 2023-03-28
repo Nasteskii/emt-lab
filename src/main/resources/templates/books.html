@@ -1,0 +1,83 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Book Store</h1>
+      <h3 class="jumbotron-heading">All Books</h3>
+    </div>
+  </section>
+  <div class="container mb-4">
+    <div class="row">
+      <div class="col mb-3" th:if="${hasError} == true">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 text-center text-danger" th:text="${error}">
+          </div>
+        </div>
+      </div>
+      <div class="col-12" th:if="${books.size() > 0}">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Authors</th>
+              <th scope="col">Category</th>
+              <th scope="col">availableCopies</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}" class="product">
+              <td th:text="${book.getName()}"></td>
+              <td th:if="${book.getAuthors != null}">
+                  <ul class="list-unstyled">
+                      <li th:each="author : ${book.getAuthors()}" th:text="${author.getName()}"></li>
+                  </ul>
+              </td>
+              <td th:text="${book.getCategory() != null}
+                            ? ${book.getCategory().name()} : 'No category'"></td>
+                <td th:text="${book.getAvailableCopies() != null}
+                            ? ${book.getAvailableCopies()} : 'No available copies'"></td>
+              <td class="text-right">
+                <th:block sec:authorize="hasRole('ROLE_LIBRARIAN')">
+                  <form th:action="@{'/books/delete/{id}' (id=${book.getId()})}"
+                        th:method="DELETE">
+                    <button type="submit"
+                            class="btn btn-sm btn-danger delete-product">
+                      <i class="fa fa-trash">Delete</i>
+                    </button>
+                  </form>
+                </th:block>
+                <th:block sec:authorize="hasRole('ROLE_LIBRARIAN')">
+                  <a th:href="@{'/books/edit-form/{id}' (id=${book.getId()})}"
+                     class="btn btn-sm btn-info edit-product">
+                    <i class="fa fa-trash">Edit</i>
+                  </a>
+                </th:block>
+                <th:block sec:authorize="hasRole('ROLE_USER')">
+                  <form th:action="@{'/books/get-book/{id}' (id=${book.getId()})}"
+                        th:method="POST"
+                        sec:authorize="isAuthenticated()">
+                    <button type="submit"
+                            class="btn btn-sm btn-primary">
+                      <i class="fa fa-trash">Get Book</i>
+                    </button>
+                  </form>
+                </th:block>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col mb-3">
+        <div class="row">
+          <div class="col-sm-12 col-md-12" sec:authorize="hasRole('ROLE_LIBRARIAN')">
+            <a href="/books/add-form" class="btn btn-block btn-dark add-product-btn">
+              Add new book
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

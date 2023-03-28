@@ -3,10 +3,12 @@ package mk.ukim.finki.emt.library.service.impl;
 import mk.ukim.finki.emt.library.model.Country;
 import mk.ukim.finki.emt.library.repository.CountryRepository;
 import mk.ukim.finki.emt.library.service.CountryService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CountryServiceImpl implements CountryService {
     private final CountryRepository countryRepository;
 

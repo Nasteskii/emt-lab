@@ -7,6 +7,7 @@ import mk.ukim.finki.emt.library.model.enumerations.Category;
 import mk.ukim.finki.emt.library.service.AuthorService;
 import mk.ukim.finki.emt.library.service.BookService;
 import mk.ukim.finki.emt.library.service.CountryService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/books")
+@RequestMapping(value = {"/books", "/"})
 public class BookController {
     private final BookService bookService;
     private final AuthorService authorService;
@@ -28,7 +29,7 @@ public class BookController {
     }
 
     @GetMapping
-    public String getProductPage(@RequestParam(required = false) String error, Model model) {
+    public String getBookPage(@RequestParam(required = false) String error, Model model) {
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
@@ -40,48 +41,62 @@ public class BookController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        this.bookService.deleteById(id);
+    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
+    public String deleteBook(@PathVariable Long id) {
+        if (this.bookService.findById(id).isPresent()) {
+            this.bookService.deleteById(id);
+            return "redirect:/books";
+        }
+        return "redirect:/books?error=Product Not Found";
+    }
+
+    @PostMapping("/get-book/{id}")
+    public String getBook(@PathVariable Long id, Model model) {
+        if (this.bookService.getBook(id) == -1) {
+            return "redirect:/books?error=No Available Copies";
+        }
         return "redirect:/books";
     }
 
     @GetMapping("/edit-form/{id}")
-    public String editProductPage(@PathVariable Long id, Model model) {
+    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
+    public String editBook(@PathVariable Long id, Model model) {
         if (this.bookService.findById(id).isPresent()) {
             Book book = this.bookService.findById(id).get();
             List<Author> authors = this.authorService.findAll();
             List<Country> countries = this.countryService.findAll();
             model.addAttribute("authors", authors);
-            model.addAttribute("countries", countries);
+            model.addAttribute("categories", Category.values());
             model.addAttribute("book", book);
             model.addAttribute("bodyContent", "add-book");
             return "master-template";
         }
-        return "redirect:/books?error=ProductNotFound";
+        return "redirect:/books?error=Product Not Found";
     }
 
     @GetMapping("/add-form")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String addProductPage(Model model) {
+    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
+    public String addBookPage(Model model) {
         List<Author> authors = this.authorService.findAll();
         List<Country> countries = this.countryService.findAll();
-        model.addAttribute("manufacturers", authors);
-        model.addAttribute("categories", countries);
+        model.addAttribute("authors", authors);
+        model.addAttribute("categories", Category.values());
         model.addAttribute("bodyContent", "add-book");
         return "master-template";
     }
 
     @PostMapping("/add")
-    public String saveProduct(
+    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
+    public String saveBook(
             @RequestParam(required = false) Long id,
             @RequestParam String name,
             @RequestParam Category category,
             @RequestParam List<Long> authors,
-            @RequestParam Integer availableCopies) {
+            @RequestParam String availableCopies) {
         if (id != null) {
-            this.bookService.edit(id, name, category, authors, availableCopies);
+            this.bookService.edit(id, name, category, authors, Integer.parseInt(availableCopies));
         } else {
-            this.bookService.save(name, category, authors, availableCopies);
+            this.bookService.save(name, category, authors, Integer.parseInt(availableCopies));
         }
         return "redirect:/books";
     }

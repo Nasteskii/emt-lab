@@ -4,11 +4,12 @@ import mk.ukim.finki.emt.library.model.Author;
 import mk.ukim.finki.emt.library.model.Country;
 import mk.ukim.finki.emt.library.repository.AuthorRepository;
 import mk.ukim.finki.emt.library.service.AuthorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
