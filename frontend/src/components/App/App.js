@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Navigate, Route, Routes} from "react-router-dom
 import Books from "../Books/BookList/books";
 import LibraryService from "../repository/LibraryRepository";
 import Categories from "../Categories/categories";
+import Header from "../Header/header";
 
 class App extends Component {
     constructor(props) {
@@ -17,6 +18,7 @@ class App extends Component {
     render() {
         return (
             <Router>
+                <Header/>
                 <main>
                     <div className="container">
                         <Routes>
