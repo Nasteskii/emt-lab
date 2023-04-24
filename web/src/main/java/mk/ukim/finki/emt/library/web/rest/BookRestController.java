@@ -26,12 +26,12 @@ public class BookRestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
-    public ResponseEntity<List<Book>> deleteBook(@PathVariable Long id) {
+//    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
+    public ResponseEntity deleteBook(@PathVariable Long id) {
         if (this.bookService.findById(id).isPresent()) {
             this.bookService.deleteById(id);
             if (this.bookService.findById(id).isEmpty()) {
-                return ResponseEntity.ok().body(this.bookService.findAll());
+                return ResponseEntity.ok().build();
             }
         }
         return ResponseEntity.badRequest().build();
@@ -54,7 +54,7 @@ public class BookRestController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
+//    @PreAuthorize("hasRole('ROLE_LIBRARIAN')")
     public ResponseEntity<Book> saveBook(@RequestBody BookDto bookDto) {
         return this.bookService.save(bookDto)
                 .map(book -> ResponseEntity.ok().body(book))
