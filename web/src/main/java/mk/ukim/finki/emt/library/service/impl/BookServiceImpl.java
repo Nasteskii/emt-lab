@@ -30,14 +30,32 @@ public class BookServiceImpl implements BookService {
 
     @PostConstruct
     public void init() {
-        Country country = new Country("Macedonia", "Europe");
-        countryRepository.save(country);
-        Author author1 = new Author("Author 1", "Author 1", country);
-        Author author2 = new Author("Author 2", "Author 2", country);
+        Country country1 = new Country("Russia", "Europe");
+        Country country2 = new Country("France", "Europe");
+        Country country3 = new Country("Britain", "Europe");
+
+        countryRepository.save(country1);
+        countryRepository.save(country2);
+        countryRepository.save(country3);
+
+        Author author1 = new Author("Leo", "Tolstoy", country1);
+        Author author2 = new Author("Jules", "Verne", country2);
+        Author author3 = new Author("J.K.", "Rowling", country3);
+
         authorRepository.save(author1);
         authorRepository.save(author2);
-        Book book = new Book("A", Category.CLASSICS, List.of(author1,author2), 3);
-        bookRepository.save(book);
+        authorRepository.save(author3);
+
+        Book book1 = new Book("Anna Karenina", Category.NOVEL, List.of(author1), 9);
+        Book book2 = new Book("War and Peace", Category.NOVEL, List.of(author1), 6);
+        Book book3 = new Book("Around the world in 80 days", Category.FANTASY, List.of(author2), 4);
+        Book book4 = new Book("Harry Potter and the Sorcerer's Stone ", Category.FANTASY, List.of(author3), 2);
+
+        bookRepository.save(book1);
+        bookRepository.save(book2);
+        bookRepository.save(book3);
+        bookRepository.save(book4);
+
     }
 
     @Override

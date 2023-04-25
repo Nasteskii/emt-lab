@@ -20,7 +20,23 @@ const LibraryService = {
             "authors": authors,
             "availableCopies": availableCopies
         })
+    },
+    editBook: (id, name, category, authors, availableCopies) => {
+        return axios.put(`/books/edit/${id}`, {
+            "id": id,
+            "name": name,
+            "category": category,
+            "authors": authors,
+            "availableCopies": availableCopies
+        })
+    },
+    getBook: (id) => {
+        return axios.get(`/books/${id}`);
+    },
+    takeBook: (id) => {
+        return axios.get(`/books/get-book/${id}`);
     }
+
 }
 
 export default LibraryService;
